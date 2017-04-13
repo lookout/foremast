@@ -2,7 +2,7 @@
     {
       "enabled": true,
       "type": "jenkins",
-      "master": "JenkinsCI",
-      "job": "{{ data.app.triggerjob }}",
-      "propertyFile": "jenkins_vars"
+      "master": "{{ data.app.triggers.jenkins.master }}",
+      "job": "{{ data.app.triggers.jenkins.job }}",
+      "propertyFile": "{{ data.app.triggers.jenkins.property_file }}"
     }

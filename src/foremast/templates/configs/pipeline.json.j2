@@ -12,7 +12,12 @@
     "primary_region": "us-east-1",
     "image": {
         "root_volume_size": 6,
-        "builder": "ebs"
+        "builder": "ebs",
+        "extended_attributes": {
+          "app_group": "${ trigger.properties.GROUP_NAME }",
+          "app_name": "${ trigger.properties.APP_NAME }",
+          "appversion": "${ trigger.properties.APP_VERSION }"
+        }
     },
     "lambda": {
         "app_description": "default description",
@@ -20,5 +25,14 @@
         "handler": "main",
         "vpc_enabled": false
     },
-    "pipeline_files": []
+    "pipeline_files": [],
+    "triggers": {
+        "jenkins": {
+            "master": "JenkinsCI",
+            "job": "",
+            "property_file": "jenkins_vars"
+        }
+    },
+    "package": "${ trigger.properties.ARTIFACT_RPM }"
+
 }

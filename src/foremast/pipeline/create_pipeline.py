@@ -117,9 +117,11 @@ class SpinnakerPipeline:
 
         email = self.settings['pipeline']['notifications']['email']
         slack = self.settings['pipeline']['notifications']['slack']
+        triggers = self.settings['pipeline']['triggers']
         baking_process = self.settings['pipeline']['image']['builder']
         provider = 'aws'
         root_volume_size = self.settings['pipeline']['image']['root_volume_size']
+        image = self.settings['pipeline']['image']
 
         if root_volume_size > 50:
             raise SpinnakerPipelineCreationFailed(
@@ -129,7 +131,11 @@ class SpinnakerPipeline:
         ami_id = ami_lookup(name=base,
                             region=region)
 
-        ami_template_file = generate_packer_filename(provider, region, baking_process)
+        package = self.settings['pipeline']['package']
+        if "ami_template_file" in self.settings['pipeline']:
+            ami_template_file = self.settings['pipeline']['ami_template_file']
+        else:
+            ami_template_file = generate_packer_filename(provider, region, baking_process)
 
         pipeline_id = self.compare_with_existing(region=region)
 
@@ -140,10 +146,11 @@ class SpinnakerPipeline:
                 'base': base,
                 'environment': 'packaging',
                 'region': region,
-                'triggerjob': self.trigger_job,
+                'triggers': triggers,
                 'email': email,
                 'slack': slack,
                 'root_volume_size': root_volume_size,
+                'package': package,
                 'ami_template_file': ami_template_file,
             },
             'id': pipeline_id

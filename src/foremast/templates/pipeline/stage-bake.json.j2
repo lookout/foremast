@@ -28,7 +28,7 @@
       },
       "enhancedNetworking": true,
       "comments": "Baking",
-      "package": "${ trigger.properties.ARTIFACT_RPM }",
+      "package": "{{ data.app.package }}",
       "templateFileName": "{{ data.app.ami_template_file }}",
       "baseAmi": "{{ data.app.ami_id }}"
     }
